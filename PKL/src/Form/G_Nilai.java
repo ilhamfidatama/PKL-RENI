@@ -44,14 +44,18 @@ public class G_Nilai extends javax.swing.JFrame {
     private final ArrayList<String> dataKodeMapel = new ArrayList<>();
     private int indexCB_KodeMapel; //menampung data hasil pemilihan dari combo box
     
-    private int pr = 0;
-    private int totalPR = 0;
-    private int ulanganHarian = 0;
-    private int totalUlanganHarian = 0;
-    private int nilai_uts = 0;
-    private int totalUTS = 0;
-    private int nilai_uas = 0;
-    private int totalUAS = 0;
+    private float pr = 0;
+    private float persentasePR = 0;
+    private float totalPR = 0;
+    private float ulanganHarian = 0;
+    private float persentaseUlanganHarian = 0;
+    private float totalUlanganHarian = 0;
+    private float nilai_uts = 0;
+    private float persentaseUTS = 0;
+    private float totalUTS = 0;
+    private float nilai_uas = 0;
+    private float persentaseUAS = 0;
+    private float totalUAS = 0;
     
     /**
      * Creates new form G_Raport
@@ -194,6 +198,14 @@ public class G_Nilai extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    private float konversiNilai(String nilai){
+        float konversi = 0;
+        if (!nilai.isEmpty()) { //kondisi jika string nilai tidak kosong
+            konversi = Float.parseFloat(nilai);
+        }
+        return konversi;
     }
 
     /**
@@ -377,18 +389,67 @@ public class G_Nilai extends javax.swing.JFrame {
         jLabel18.setText("TOTAL");
         jPanel2.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 180, -1, -1));
 
+        txt_tugas.setText("0");
         txt_tugas.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 txt_tugasCaretUpdate(evt);
             }
         });
         jPanel2.add(txt_tugas, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 180, 40, 30));
+
+        txt_uh.setText("0");
+        txt_uh.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txt_uhCaretUpdate(evt);
+            }
+        });
         jPanel2.add(txt_uh, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 220, 40, 30));
+
+        txt_uts.setText("0");
+        txt_uts.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txt_utsCaretUpdate(evt);
+            }
+        });
         jPanel2.add(txt_uts, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 40, 30));
+
+        txt_uas.setText("0");
+        txt_uas.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txt_uasCaretUpdate(evt);
+            }
+        });
         jPanel2.add(txt_uas, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 40, 30));
+
+        txt_ptugas.setText("0");
+        txt_ptugas.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txt_ptugasCaretUpdate(evt);
+            }
+        });
         jPanel2.add(txt_ptugas, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 40, 30));
+
+        txt_puh.setText("0");
+        txt_puh.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txt_puhCaretUpdate(evt);
+            }
+        });
         jPanel2.add(txt_puh, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 40, 30));
+
+        txt_puts.setText("0");
+        txt_puts.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txt_putsCaretUpdate(evt);
+            }
+        });
         jPanel2.add(txt_puts, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 260, 40, 30));
+
+        txt_puas.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txt_puasCaretUpdate(evt);
+            }
+        });
         jPanel2.add(txt_puas, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 300, 40, 30));
 
         tugas.setEditable(false);
@@ -670,8 +731,60 @@ public class G_Nilai extends javax.swing.JFrame {
         indexCB_KodeMapel = cbmp.getSelectedIndex();
     }//GEN-LAST:event_cbmpActionPerformed
 
+    private void txt_ptugasCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_ptugasCaretUpdate
+        persentasePR = konversiNilai(txt_ptugas.getText());
+        
+        totalPR = pr*(persentasePR/100);
+        tugas.setText(String.valueOf(totalPR));
+    }//GEN-LAST:event_txt_ptugasCaretUpdate
+
+    private void txt_uhCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_uhCaretUpdate
+        ulanganHarian = konversiNilai(txt_uh.getText());
+        
+        totalUlanganHarian = ulanganHarian*(persentaseUlanganHarian/100);
+        uh.setText(String.valueOf(totalUlanganHarian));
+    }//GEN-LAST:event_txt_uhCaretUpdate
+
+    private void txt_puhCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_puhCaretUpdate
+        persentaseUlanganHarian = konversiNilai(txt_puh.getText());
+        
+        totalUlanganHarian = ulanganHarian*(persentaseUlanganHarian/100);
+        uh.setText(String.valueOf(totalUlanganHarian));
+    }//GEN-LAST:event_txt_puhCaretUpdate
+
+    private void txt_utsCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_utsCaretUpdate
+        nilai_uts = konversiNilai(txt_uts.getText());
+        
+        totalUTS = nilai_uts*(persentaseUTS/100);
+        uts.setText(String.valueOf(totalUTS));
+    }//GEN-LAST:event_txt_utsCaretUpdate
+
+    private void txt_putsCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_putsCaretUpdate
+        persentaseUTS = konversiNilai(txt_puts.getText());
+        
+        totalUTS = nilai_uts*(persentaseUTS/100);
+        uts.setText(String.valueOf(totalUTS));
+    }//GEN-LAST:event_txt_putsCaretUpdate
+
+    private void txt_uasCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_uasCaretUpdate
+        nilai_uas = konversiNilai(txt_uas.getText());
+        
+        totalUAS = nilai_uas*(persentaseUAS/100);
+        uas.setText(String.valueOf(totalUAS));
+    }//GEN-LAST:event_txt_uasCaretUpdate
+
+    private void txt_puasCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_puasCaretUpdate
+        nilai_uas = konversiNilai(txt_puas.getText());
+        
+        totalUAS = nilai_uas*(persentaseUAS/100);
+        uas.setText(String.valueOf(totalUAS));
+    }//GEN-LAST:event_txt_puasCaretUpdate
+
     private void txt_tugasCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_tugasCaretUpdate
-        // TODO add your handling code here:
+        pr = konversiNilai(txt_tugas.getText());
+
+        totalPR = pr*(persentasePR/100);
+        tugas.setText(String.valueOf(totalPR));
     }//GEN-LAST:event_txt_tugasCaretUpdate
 
     /**
