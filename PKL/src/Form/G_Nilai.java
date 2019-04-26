@@ -14,6 +14,8 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -96,18 +98,6 @@ public class G_Nilai extends javax.swing.JFrame {
         txtnama.setText("");   
     }
     
-    public void totalnilai() {
-        int kuis, tgs, mid, uas1, nilai;
-        //String total;
-        kuis = Integer.parseInt(uh.getText());
-        tgs = Integer.parseInt(tugas.getText());
-        mid = Integer.parseInt(uts.getText());
-        uas1 = Integer.parseInt(uas.getText());
-        nilai = (kuis + tgs + mid + uas1);
-        //total=String.valueOf(nilai);
-        txt_total.setText(Integer.toString(nilai));
-    }
-    
     private void cbnis() {
         cbnis.removeAllItems();
         cbnis.addItem("Pilih NIS");
@@ -143,7 +133,7 @@ public class G_Nilai extends javax.swing.JFrame {
             String nama, kode;
             while (rs.next()) {
                 nama = rs.getString("nama_guru");
-                kode = rs.getString("kode");
+                kode = rs.getString("kd_guru");
                 cbkdg.addItem(nama);
                 dataKodeGuru.add(kode);
             }
@@ -445,6 +435,7 @@ public class G_Nilai extends javax.swing.JFrame {
         });
         jPanel2.add(txt_puts, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 260, 40, 30));
 
+        txt_puas.setText("0");
         txt_puas.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 txt_puasCaretUpdate(evt);
@@ -454,30 +445,10 @@ public class G_Nilai extends javax.swing.JFrame {
 
         tugas.setEditable(false);
         tugas.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        tugas.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                tugasInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-        });
-        tugas.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tugasKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tugasKeyReleased(evt);
-            }
-        });
         jPanel2.add(tugas, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 60, 30));
 
         uh.setEditable(false);
         uh.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        uh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                uhActionPerformed(evt);
-            }
-        });
         jPanel2.add(uh, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 60, 30));
 
         uts.setEditable(false);
@@ -641,29 +612,29 @@ public class G_Nilai extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel12MouseClicked
 
-    private void uhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uhActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_uhActionPerformed
-
-    private void tugasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tugasKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tugasKeyPressed
-
-    private void tugasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tugasKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tugasKeyReleased
-
-    private void tugasInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tugasInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tugasInputMethodTextChanged
-
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
         //java.sql.Connection conn = new DBConnection().connect();
-        String cmbnis = (String) cbnis.getSelectedItem();
-        String nama = txtnama.getText();
-        String guru = (String) cbkdg.getSelectedItem();
-        String mapel = (String) cbmp.getSelectedItem();
-        String kelas = (String) cbkelas.getSelectedItem();
+        String nisSiswa = dataNisSiswa.get(indexCB_Nis-1);
+        String namaSiswa = cbnis.getItemAt(indexCB_Nis);
+        String kdGuru = dataKodeGuru.get(indexCB_KodeGuru-1);
+        String kdKelas = dataKodeKelas.get(indexCB_KodeKelas-1);
+        String kdMapel = dataKodeMapel.get(indexCB_KodeMapel-1);
+        
+        float totalNilai = totalPR+totalUlanganHarian+totalUTS+totalUAS;
+
+        if (nisSiswa.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Tolong masukan data anda ", "PERHATIAN", JOptionPane.WARNING_MESSAGE);
+        }else{
+            try {
+                String sql = "INSERT INTO `p_nilai`(`n_nis`, `n_nama_siswa`, `n_guru`, `n_mapel`, `n_kelas`, `n_tugas`, `n_kuis`, `n_uts`, `n_uas`, `n_total`) VALUES ('"+nisSiswa+"','"+namaSiswa+"','"+kdGuru+"','"+kdMapel+"','"+kdKelas+"',"+totalPR+","+totalUlanganHarian+","+totalUTS+","+totalUAS+","+totalNilai+")";
+                System.out.println(sql);
+                java.sql.Statement stat = conn.createStatement();
+                stat.executeUpdate(sql);
+                System.out.println("berhasil");
+            } catch (SQLException ex) {
+                System.err.println("ERROR:" + ex);
+            }
+        }
 //        String nis = txtnis.getText();
 //        if (txtnis.getText().trim().equals("")) {
 //            JOptionPane.showMessageDialog(null, "Tolong masukan data anda ", "PERHATIAN", JOptionPane.WARNING_MESSAGE);
@@ -774,7 +745,7 @@ public class G_Nilai extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_uasCaretUpdate
 
     private void txt_puasCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txt_puasCaretUpdate
-        nilai_uas = konversiNilai(txt_puas.getText());
+        persentaseUAS = konversiNilai(txt_puas.getText());
         
         totalUAS = nilai_uas*(persentaseUAS/100);
         uas.setText(String.valueOf(totalUAS));
